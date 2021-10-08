@@ -1,0 +1,46 @@
+html,
+body,
+.centered {
+  height: 100%;
+  overflow: hidden;
+}
+
+h1 {
+  font-family: Verdana, Geneva, sans-serif;;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#joySVG {
+  position: absolute;
+  width: 20%;
+}
+
+#joySVG:hover {
+  animation-name: move;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  cursor: wait;
+}
+
+@keyframes move {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(2);
+  }
+
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
