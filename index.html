@@ -42,7 +42,7 @@
 
   <!-- First Load -->
   <script>
-    $(document).ready(function () {
+    $(document).ready(() => {
       console.log(
         `%cArrow keys Up/Down control volume, which defaults at ${music.volume}\nArrow keys Left/Right control the animation speed, which defaults at ${animDuration} seconds.\nYou need to interact with the website in order to have music playback.\nClicking anywhere restarts the music.\n\nThis was made as a joke and still is a joke :)\nFollow me: https://twitter.com/MozzyFX`,
         'background: #202225; font-size: 15px; color: #ffcc4d');
@@ -50,9 +50,9 @@
   </script>
   <!-- Runs and pauses music based on mouse position -->
   <script>
-    $(document).ready(function () {
-      $(document).mousemove(function () {
-        if ($("#joySVG:hover").length != 0) {
+    $(document).ready(() => {
+      $(document).mousemove(() => {
+        if ($("#joySVG:hover").length !== 0) {
           music.play();
           // console.log("😂 Mouse on emote, starting music 😂");
         } else {
@@ -65,7 +65,7 @@
 
   <!-- Activates music ability and hides info text. Also restarts music on click. -->
   <script>
-    $(document).click(function () {
+    $(document).click(() => {
       $("#informativeTextLMAO").hide();
       music.currentTime = 0;
       console.log("😂 Clicked, restarting music 😂");
@@ -74,14 +74,14 @@
 
   <!-- Volume changing and animation speed changing-->
   <script>
-    var animDuration = 2.0;
+    let animDuration = 2.0;
     music.volume = 0.4;
-    document.onkeydown = function (e) {
+    document.onkeydown = e => {
       switch (e.keyCode) {
         // Up
         case 38:
           try {
-            music.volume = music.volume + .1;
+            music.volume += .1;
             console.log(`Set volume to ${music.volume.toFixed(1)}`);
           } catch (DOMException) {
             console.log(`You're likely at max volume already. Current volume: ${music.volume.toFixed(1)}`);
@@ -90,7 +90,7 @@
         // Down
         case 40:
           try {
-            music.volume = music.volume - .1;
+            music.volume -= .1;
             console.log(`Set volume to ${music.volume.toFixed(1)}`);
           } catch (DOMException) {
             console.log(`You're likely at lowest volume already. Current volume: ${music.volume.toFixed(1)}`);
@@ -98,13 +98,13 @@
           break;
         // Left
         case 37:
-          animDuration = (animDuration + .1);
+          animDuration += .1;
           $("#joySVG").css("animation-duration", `${animDuration}s`);
           console.log(`Animation duration slowed down to ${animDuration.toFixed(1)} seconds.`);
           break;
         // Right
         case 39:
-          animDuration = (animDuration - .1)
+          animDuration -= .1;
           if (animDuration < .1) {
             animDuration = .1;
             $("#joySVG").css("animation-duration", `${animDuration}s`);
