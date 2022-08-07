@@ -28,97 +28,91 @@
   <link rel="icon" href="assets/images/joyemote.ico" type="image/x-icon">
   <link rel="shortcut icon" href="assets/images/joyemote.ico" type="image/x-icon">
   <link rel="stylesheet" href="assets/css/style.css">
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/cursor-effects@latest/dist/browser.js"></script>
 </head>
 
 <body>
 
-  <!-- Selects audio -->
-  <audio loop id="music">
-    <source src="assets/sound/rightround.mp3">
-    </source>
-  </audio>
-
   <!-- First Load -->
   <script>
-    $(document).ready(() => {
-      console.log(
-        `%cArrow keys Up/Down control volume, which defaults at ${music.volume}\nArrow keys Left/Right control the animation speed, which defaults at ${animDuration} seconds.\nYou need to interact with the website in order to have music playback.\nClicking anywhere restarts the music.\n\nThis was made as a joke and still is a joke :)\nFollow me: https://twitter.com/MozzyFX`,
-        'background: #202225; font-size: 15px; color: #ffcc4d');
-    })
-  </script>
-  <!-- Runs and pauses music based on mouse position -->
-  <script>
-    $(document).ready(() => {
-      $(document).mousemove(() => {
-        if ($("#joySVG:hover").length !== 0) {
-          music.play();
-          // console.log("😂 Mouse on emote, starting music 😂");
-        } else {
-          music.pause();
-          // console.log("😂 Mouse off emote, pausing music 😂");
+    window.addEventListener("load", () => {
+
+      // Get elements
+      const infoText = document.getElementById("informativeText")
+      const joy = document.getElementById("joySVG");
+      const music = new Audio("assets/sound/rightround.mp3");
+
+      // Cursor magic
+      new cursoreffects.emojiCursor({ emoji: ["🤣", "😂"] });
+
+      // Set initial values
+      let animDuration = 2;
+      music.volume = 0.4;
+
+      // Post info
+      console.log(`%cArrow keys Up/Down control volume, which defaults at ${music.volume}.\nArrow keys Left/Right control the animation speed, which defaults at ${animDuration} seconds.\nYou need to interact with the website in order to have music playback.\nClicking anywhere restarts the music.\n\nThis was made as a joke and still is a joke :)\nFollow me: https://twitter.com/MozzyFX`, 'background: #202225; font-size: 15px; color: #ffcc4d');
+
+      // Set up music-playing
+      document.addEventListener("mousemove", () => {
+        joy.matches(":hover") ? music.play() : music.pause();
+      });
+
+      // Handle clicking the page
+      window.addEventListener("click", () => {
+        infoText.hidden = true;
+        music.currentTime = 0;
+        console.log("😂 Clicked, restarting music 😂");
+      });
+
+      // Handle the volume and speed control
+      document.addEventListener("keydown", e => {
+        switch (e.keyCode) {
+
+          // Up
+          case 38:
+            try {
+              music.volume += .1;
+              console.log(`Set volume to ${music.volume.toFixed(1)}`);
+            } catch (DOMException) {
+              console.log(`You're likely at max volume already. Current volume: ${music.volume.toFixed(1)}`);
+            }
+            break;
+
+          // Down
+          case 40:
+            try {
+              music.volume -= .1;
+              console.log(`Set volume to ${music.volume.toFixed(1)}`);
+            } catch (DOMException) {
+              console.log(`You're likely at lowest volume already. Current volume: ${music.volume.toFixed(1)}`);
+            }
+            break;
+
+          // Left
+          case 37:
+            animDuration += .1;
+            joy.style.animationDuration = `${animDuration}s`;
+            console.log(`Animation duration slowed down to ${animDuration.toFixed(1)} seconds.`);
+            break;
+
+          // Right
+          case 39:
+            animDuration -= .1;
+            if (animDuration < .1) {
+              animDuration = .1;
+              joy.style.animationDuration = `${animDuration}s`;
+              console.log("Can't be lower than .1 seconds. It's been set to .1 anyway, don't worry if the above says .2");
+            } else {
+              joy.style.animationDuration = `${animDuration}s`;
+              console.log(`Animation duration sped up to ${animDuration.toFixed(1)} seconds.`);
+            }
+            break;
         }
       });
     });
   </script>
 
-  <!-- Activates music ability and hides info text. Also restarts music on click. -->
-  <script>
-    $(document).click(() => {
-      $("#informativeTextLMAO").hide();
-      music.currentTime = 0;
-      console.log("😂 Clicked, restarting music 😂");
-    })
-  </script>
-
-  <!-- Volume changing and animation speed changing-->
-  <script>
-    let animDuration = 2.0;
-    music.volume = 0.4;
-    document.onkeydown = e => {
-      switch (e.keyCode) {
-        // Up
-        case 38:
-          try {
-            music.volume += .1;
-            console.log(`Set volume to ${music.volume.toFixed(1)}`);
-          } catch (DOMException) {
-            console.log(`You're likely at max volume already. Current volume: ${music.volume.toFixed(1)}`);
-          }
-          break;
-        // Down
-        case 40:
-          try {
-            music.volume -= .1;
-            console.log(`Set volume to ${music.volume.toFixed(1)}`);
-          } catch (DOMException) {
-            console.log(`You're likely at lowest volume already. Current volume: ${music.volume.toFixed(1)}`);
-          }
-          break;
-        // Left
-        case 37:
-          animDuration += .1;
-          $("#joySVG").css("animation-duration", `${animDuration}s`);
-          console.log(`Animation duration slowed down to ${animDuration.toFixed(1)} seconds.`);
-          break;
-        // Right
-        case 39:
-          animDuration -= .1;
-          if (animDuration < .1) {
-            animDuration = .1;
-            $("#joySVG").css("animation-duration", `${animDuration}s`);
-            console.log("Can't be lower than .1 seconds. It's been set to .1 anyway, don't worry if the above says .2");
-          } else {
-            $("#joySVG").css("animation-duration", `${animDuration}s`);
-            console.log(`Animation duration sped up to ${animDuration.toFixed(1)} seconds.`);
-          }
-          break;
-      }
-    };
-  </script>
-
-  <h1 id="informativeTextLMAO">Click anywhere on the website, then hover over emote. Arrow keys control stuff. Check
+  <h1 id="informativeText">Click anywhere on the website, then hover over emote. Arrow keys control stuff. Check
     Console.</h1>
 
   <div class="centered">
